@@ -1,0 +1,84 @@
+{% extends "sidebar.html" %} {% load static %} {% block content %}
+    <!-- CDN Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- <script src="{% static 'js/script.js' %}" defer></script> -->
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex min-h-screen">
+      <!-- Main Content -->
+      <main class="flex-1 p-8">
+        <h2 class="text-3xl font-bold mb-5">Tableau de bord</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1: Number of Students -->
+          <div class="bg-white shadow-md p-6 rounded-lg text-center">
+            <h3 class="text-xl font-bold">Nombre d'élève</h3>
+            <p class="text-4xl font-bold mt-4">128 100</p>
+          </div>
+
+          <!-- Card 2: Number of Professors -->
+          <div class="bg-white shadow-md p-6 rounded-lg text-center">
+            <h3 class="text-xl font-bold">Nombre de professeur</h3>
+            <p class="text-4xl font-bold mt-4">128 100</p>
+          </div>
+
+          <!-- Card 3: Number of Users -->
+          <div class="bg-white shadow-md p-6 rounded-lg text-center">
+            <h3 class="text-xl font-bold">Nombre d'utilisateur</h3>
+            <p class="text-4xl font-bold mt-4">128 100</p>
+          </div>
+
+          <!-- Card 4: Pie Chart for Gender -->
+          <div
+            class="bg-white p-6 rounded-lg shadow flex flex-col items-center"
+          >
+            <h3 class="text-xl font-bold">
+              Élèves par genre
+            </h3>
+            <div class="relative w-full h-64">
+              <canvas id="pieChart" class="absolute inset-0"></canvas>
+            </div>
+            <div class="mt-4">
+              <ul class="list-none">
+                <li class="flex items-center mb-2">
+                  <span class="inline-block w-4 h-4 bg-blue-500 mr-2"></span>
+                  Homme
+                </li>
+                <li class="flex items-center">
+                  <span class="inline-block w-4 h-4 bg-red-500 mr-2"></span>
+                  Femme
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Initialize Chart.js
+      const ctx = document.getElementById("pieChart").getContext("2d");
+      new Chart(ctx, {
+        type: "pie",
+        data: {
+          datasets: [
+            {
+              data: [60, 50], // Example data
+              backgroundColor: ["#007bff", "#dc3545"],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // Allows the chart to resize based on the container
+        },
+      });
+    </script>
+  </body>
+</html>
+{% endblock content %}

@@ -1,0 +1,76 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <!-- En-tête avec titre et actions -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700">
+                Informations sur les Cartes Élèves
+            </h2>
+            <div class="flex space-x-4">
+                <!-- Bouton d'ajout de carte élève -->
+                <a href="{% url 'student:add_studentCards' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
+                    <i class="fas fa-plus-circle mr-2"></i> Ajouter une Carte Élève
+                </a>
+            </div>
+        </div>
+
+        <!-- Tableau des cartes élèves -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-800 text-white text-left">
+                        <th class="px-4 py-2">Référence</th>
+                        <th class="px-4 py-2">Date de création</th>
+                        <th class="px-4 py-2">Date d'expiration</th>
+                        <th class="px-4 py-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if studentCards %}
+                        {% for studentCard in studentCards %}
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ studentCard.reference }}</td>
+                            <td class="px-4 py-2">{{ studentCard.issue_date }}</td>
+                            <td class="px-4 py-2">{{ studentCard.expiration_date }}</td>
+                            <td class="px-4 py-2 text-center space-x-2">
+                                <a href="{% url 'student:update_studentCards' studentCard.id %}" class="text-blue-500 hover:underline">Modifier</a>
+                                <button onclick="notif('{{ studentCard.id }}')" class="text-red-500 hover:underline">Supprimer</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-red-500 py-4">
+                                <h3>Aucune information disponible pour le moment.</h3>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(studentCardId) {
+        const deleteUrl = "{% url 'student:delete_studentCards' 0 %}".replace('0', studentCardId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Non",
+            dangerMode: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

@@ -1,0 +1,46 @@
+{% extends "sidebar.html" %}
+{% load static %}
+
+
+{% block content %}
+    <section class="flex flex-col items-center justify-center mt-10">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">{{ title }}</h2>
+
+        <form action="" method="post" class="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-6 space-y-4">
+                {{ student.as_p }}
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <a href="{% url 'student:list_student' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Annuler
+                </a>
+                <button type="submit" name="enregistrer" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </section>
+{% endblock content %}
+
+{% block notif_javascript %}
+    <script>
+        function notif(student){
+            var elt = '{% url "student:delete_student" 0 %}'.replace('0', student);
+            Swal.fire({
+                title: "Etes-vous sûr de vouloir supprimer ?",
+                icon: "question",
+                confirmButtonText: "Oui",
+                cancelButtonText: "Non",
+                showCancelButton: true,
+                showCloseButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = elt;
+                }
+            });
+        }
+    </script>
+{% endblock notif_javascript %}

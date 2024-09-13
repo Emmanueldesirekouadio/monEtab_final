@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MonEtab</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}" /> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Custom style to make the logo white */
+      .logo {
+        filter: brightness(0) invert(1);
+        width: 3rem;
+        height: 3rem;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans antialiased min-h-screen">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      {% block header %}
+      {% if app_setting_total and school_total %}
+      <aside class="w-64 bg-gray-800 text-white min-h-screen flex-shrink-0">
+        <!-- Sidebar Content -->
+        <div class="flex flex-col h-full justify-between">
+          <!-- Sidebar Navigation -->
+          <nav class="p-4">
+            <h1
+              class="text-3xl font-semibold text-center mb-8 mt-4 flex items-center justify-center"
+            >
+              <img
+                src="{% static 'images/logo_site.png' %}"
+                alt="Logo"
+                class="logo w-12 h-12 mr-2"
+              />
+              Mon Etab
+            </h1>
+            <ul class="space-y-4">
+              <li>
+                <a
+                  href="{% url 'dashboard:dashboard' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-th-large text-2xl mr-3"></i> Tableau de
+                  bord</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'student:list_student' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-user-graduate text-2xl mr-3"></i> Elèves</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'teacher:list_teacher' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-chalkboard-teacher text-2xl mr-3"></i>
+                  Professeurs</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'user:list_user' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-users text-2xl mr-3"></i> Utilisateurs</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'rapport:rapport' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-file-alt text-2xl mr-3"></i> Rapport</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'school:update_school' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-school text-2xl mr-3"></i> Paramètre
+                  École</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'user:list_roleUser' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-user-tag text-2xl mr-3"></i> Rôle
+                  Utilisateur</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'school:update_appSetting' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-cogs text-2xl mr-3"></i> Paramètre
+                  Application</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'student:list_absence' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-calendar-times text-2xl mr-3"></i>
+                  Absence</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'student:list_studentCards' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-id-card text-2xl mr-3"></i> Carte
+                  Étudiante</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'user:list_adresse' %}"
+                  class="flex items-center text-white hover:text-gray-400 text-lg"
+                  ><i class="fas fa-map-marker-alt text-2xl mr-3"></i>
+                  Adresse</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Logout Button -->
+          <div class="p-4 mt-auto">
+            <a
+              href="{% url 'login:logout_view' %}"
+              class="flex items-center text-red-500 hover:text-red-600 text-lg"
+            >
+              <i class="fas fa-sign-out-alt text-2xl mr-3"></i> Déconnexion
+            </a>
+          </div>
+        </div>
+      </aside>
+      {% endif %} {% endblock header %}
+
+      <!-- Main Content -->
+      <div class="flex-1 p-6 overflow-auto">
+        {% block content %} {% endblock content %}
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% block notif_javascript %} {% endblock notif_javascript %}
+  </body>
+</html>

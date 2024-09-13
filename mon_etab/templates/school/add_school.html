@@ -1,0 +1,44 @@
+{% extends "sidebar.html" %}
+{% load static %}
+
+{% block title %}<title>{{ title }}</title>{% endblock title %}
+
+{% block content %}
+<section class="flex flex-col items-center justify-center mt-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8">{{ title }}</h2>
+
+    <form action="" method="post" class="w-full max-w-lg bg-white shadow-md rounded-lg p-6" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ school_form }}
+
+        <div class="flex justify-between mt-6">
+            <a href="{% url 'school:list_school' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Annuler
+            </a>
+            <button type="submit" name="enregistrer" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Enregistrer
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(schoolId) {
+        const deleteUrl = "{% url 'school:delete_school' 0 %}".replace('0', schoolId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "question",
+            confirmButtonText: "Oui",
+            cancelButtonText: "Non",
+            showCancelButton: true,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;  // Redirect to the dynamically generated URL
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

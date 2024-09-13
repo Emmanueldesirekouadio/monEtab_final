@@ -1,0 +1,115 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <!-- En-tête avec titre et actions -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700">
+                Informations sur les Utilisateurs ({{ count_user }})
+            </h2>
+            <div class="flex space-x-4">
+                <!-- Bouton d'ajout d'utilisateur -->
+                <a href="{% url 'user:add_user' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
+                    <i class="fas fa-plus-circle mr-2"></i> Ajouter un Utilisateur
+                </a>
+                <!-- Barre de recherche -->
+                <form method="get" class="flex items-center">
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ search_area }}"
+                        class="border border-gray-300 px-3 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        placeholder="Rechercher un utilisateur"
+                    />
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-r-lg hover:bg-green-600">
+                        Recherche
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tableau des utilisateurs -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-800 text-white text-left">
+                        <th class="px-4 py-2">Pseudo</th>
+                        <th class="px-4 py-2">Date de création</th>
+                        <th class="px-4 py-2">Statut</th>
+                        <th class="px-4 py-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if users %}
+                        {% for user in users %}
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ user.username }}</td>
+                            <td class="px-4 py-2">{{ user.date_joined|date:"Y-m-d" }}</td>
+                            <td class="px-4 py-2">{{ user.is_active }}</td>
+                            <td class="px-4 py-2 text-center space-x-2">
+                                <!-- Bouton Modifier -->
+                                <a href="{% url 'user:update_user' user.id %}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                                    Modifier
+                                </a>
+                                <!-- Bouton Supprimer -->
+                                <button onclick="notif({{ user.id }})" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                                    Supprimer
+                                </button>
+                                <!-- Bouton Désactiver -->
+                                <button onclick="notifDesactiver({{ user.id }})" style="background-color: green; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer;">
+                                    Désactiver
+                                </button>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-red-500 py-4">
+                                <h3>Aucune information disponible pour le moment.</h3>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(user) {
+        const deleteUrl = "{% url 'user:delete_user' 0 %}".replace('0', user);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Non",
+            dangerMode: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;
+            }
+        });
+    }
+
+    function notifDesactiver(user) {
+        const deactivateUrl = "{% url 'user:deactivate_user' 0 %}".replace('0', user);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir désactiver ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, désactiver",
+            cancelButtonText: "Non",
+            dangerMode: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deactivateUrl;
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

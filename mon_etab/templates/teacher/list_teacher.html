@@ -1,0 +1,103 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <!-- En-tête avec titre et actions -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700">
+                Informations sur les Professeurs ( {{count_teacher}} )
+            </h2>
+            <div class="flex space-x-4">
+                <!-- Bouton d'ajout de professeur -->
+                <a href="{% url 'teacher:add_teacher' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
+                    <i class="fas fa-plus-circle mr-2"></i> Ajouter un Professeur
+                </a>
+                <!-- Barre de recherche -->
+                <form method="get" class="flex items-center">
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{search_area}}"
+                        class="border border-gray-300 px-3 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        placeholder="Rechercher un professeur"
+                    />
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-r-lg hover:bg-green-600">
+                        Recherche
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tableau des professeurs -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-800 text-white text-left">
+                        <th class="px-4 py-2">Nom</th>
+                        <th class="px-4 py-2">Prénom</th>
+                        <th class="px-4 py-2">Téléphone</th>
+                        <th class="px-4 py-2">Date de naissance</th>
+                        <th class="px-4 py-2">Photo</th>
+                        <th class="px-4 py-2">Genre</th>
+                        <th class="px-4 py-2">Disponibilité</th>
+                        <th class="px-4 py-2">Spécialité</th>
+                        <th class="px-4 py-2">Pseudo</th>
+                        <th class="px-4 py-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if teachers %}
+                        {% for teacher in teachers %}
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ teacher.first_name }}</td>
+                            <td class="px-4 py-2">{{ teacher.last_name }}</td>
+                            <td class="px-4 py-2">{{ teacher.phone_number }}</td>
+                            <td class="px-4 py-2">{{ teacher.birthday }}</td>
+                            <td class="px-4 py-2">
+                                <img src="{{ teacher.url_picture }}" alt="Photo de {{ teacher.first_name }}" class="w-12 h-12 object-cover rounded-full">
+                            </td>
+                            <td class="px-4 py-2">{{ teacher.sexe }}</td>
+                            <td class="px-4 py-2">{{ teacher.available }}</td>
+                            <td class="px-4 py-2">{{ teacher.speciality }}</td>
+                            <td class="px-4 py-2">{{ teacher.user.pseudo }}</td>
+                            <td class="px-4 py-2 text-center space-x-2">
+                                <a href="{% url 'teacher:update_teacher' teacher.id %}" class="text-blue-500 hover:underline">Modifier</a>
+                                <button onclick="notif('{{ teacher.id }}')" class="text-red-500 hover:underline">Supprimer</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="10" class="text-center text-red-500 py-4">
+                                <h3>Aucune information disponible pour le moment.</h3>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(teacherId) {
+        const deleteUrl = "{% url 'teacher:delete_teacher' 0 %}".replace('0', teacherId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Non",
+            dangerMode: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

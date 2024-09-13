@@ -1,0 +1,47 @@
+{% extends "sidebar.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">{{ title }}</h2>
+
+        <form action="" method="post" class="space-y-6" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="bg-gray-100 p-6 rounded-lg">
+                {{ studentCards_form.as_p }}
+            </div>
+
+            <div class="flex space-x-4 mt-6">
+                <a href="{% url 'student:list_absence' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-500 hover:bg-gray-700">
+                    Annuler
+                </a>
+                <button type="submit" name="enregistrer" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700">
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(studentCardId) {
+        var elt = '{% url "student:delete_studentCards" 0 %}'.replace('0', studentCardId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Non",
+            dangerMode: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = elt;
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

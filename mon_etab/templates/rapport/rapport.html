@@ -1,0 +1,71 @@
+{% extends "sidebar.html" %}
+{% load static %}
+ 
+
+{% block content %}
+
+    <div class="main">
+        <div class="row">
+            <h2>Rapport </h2>
+        </div>
+        <div class="row">
+            {% comment %} <form method="POST">
+                {% csrf_token %}
+                <div class="col-8"> 
+                    <div class="input-box-2">
+                        <select name="sexe" required class="champ-input">
+                            <option value="">Choisir...</option>
+                            <option value="student">Liste des élèves</option>
+                            <option value="prof">Liste des professeurs</option>
+                            <option value="user">Liste des utilisateurs</option>
+                        </select>
+                    </div>
+                </div>
+            </form> {% endcomment %}
+
+            <form action="{% url 'rapport:pdf_generate' %}" method="POST" class="grid grid-cols-2 gap-6">
+                <!-- Champ Nom -->
+                {% csrf_token %}
+                <div>
+                  
+                  <select
+                    id="classe"
+                    name="classe"
+                    class="mt-1 block w-full p-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  >
+                    <option value="Listes_des_eleves">Listes des élèves</option>
+                    <option value="Listes_des_professeurs">Listes des professeus</option>
+                    <option value="Listes_des_utilisateur">Listes des utilisateurs</option>
+                  </select>
+                </div>
+                <!-- Boutons -->
+                <div class="col-span-2 flex justify-center space-x-4">
+                  <button
+                    type="submit"
+                    class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" name="export_type" value="pdf"
+                  >
+                    Générer format PDF
+                  </button>
+                  <button
+                    type="submit"
+                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded" name="export_type" value="excel"
+                  >
+                    Générer format Excel
+                  </button>
+                </div>
+              </form>
+
+
+
+            {% comment %} <div class="col-4">
+                <div class="btn">
+                    <button type="submit" name="inscrire" class="annuler"> <a href="{% url 'rapport:pdf_generate' %}">Générer format pdf</a>  </button>
+                    <button type="submit" name="enregistrer" class="inscrire"> <a href="{% url 'rapport:excel_generate' %}" > Générer format excel </a></button>
+                </div>
+            </div> {% endcomment %}
+        </div>
+    </div>
+
+{% endblock content %}
+
+

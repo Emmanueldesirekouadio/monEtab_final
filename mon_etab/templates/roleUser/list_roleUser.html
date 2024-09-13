@@ -1,0 +1,73 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+<div class="main">
+    <div class="table-container">
+        <div class="row mb-4">
+            <div class="col-10">
+                <h2 class="text-2xl font-semibold">Informations sur les Rôles des Utilisateurs</h2>
+            </div>
+            <div class="col-2 text-right">
+                <a href="{% url 'user:add_roleUser' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    <i class="fas fa-plus-circle mr-2"></i> Ajouter un Rôle Utilisateur
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom rôle</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% if roleUsers %}
+                        {% for roleUser in roleUsers %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ roleUser.role }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{% url 'user:update_roleUser' roleUser.id %}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2">
+                                        Modifier
+                                    </a>
+                                    <button onclick="notif('{{ roleUser.id }}')" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                        Supprimer
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="2" class="px-6 py-4 text-center text-red-500">
+                                Aucune Information pour l'instant
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(roleUserId) {
+        const deleteUrl = "{% url 'user:delete_roleUser' 0 %}".replace('0', roleUserId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "question",
+            iconHtml: "?",
+            confirmButtonText: "Oui",
+            cancelButtonText: "Non",
+            showCancelButton: true,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;  // Rediriger vers l'URL générée dynamiquement
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

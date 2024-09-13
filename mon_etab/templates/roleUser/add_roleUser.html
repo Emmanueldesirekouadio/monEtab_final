@@ -1,0 +1,45 @@
+{% extends "sidebar.html" %}
+{% load static %}
+
+{% block content %}
+<section class="inscription p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">{{ title }}</h2>
+    <form action="" method="post" class="box-form space-y-4" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+            {{ roleUsers_form }}
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'user:list_roleUser' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                Annuler
+            </a>
+            <button type="submit" name="enregistrer" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Enregistrer
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(roleUserId) {
+        var elt = '{% url "user:delete_roleUser" 0 %}'.replace('0', roleUserId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "question",
+            iconHtml: "?",
+            confirmButtonText: "Oui",
+            cancelButtonText: "Non",
+            showCancelButton: true,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = elt;
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}

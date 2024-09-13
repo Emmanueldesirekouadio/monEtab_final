@@ -1,0 +1,67 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-700">Informations sur les Adresses</h2>
+            <a href="{% url 'user:add_adresse' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center">
+                <i class="fas fa-plus-circle mr-2"></i> Ajouter une Adresse
+            </a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white table-auto border-collapse">
+                <thead>
+                    <tr class="bg-gray-800 text-white text-left">
+                        <th class="px-4 py-2">Rue</th>
+                        <th class="px-4 py-2">Ville</th>
+                        <th class="px-4 py-2">Pays</th>
+                        <th class="px-4 py-2 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if adresses %}
+                        {% for adresse in adresses %}
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ adresse.street }}</td>
+                            <td class="px-4 py-2">{{ adresse.city }}</td>
+                            <td class="px-4 py-2">{{ adresse.country }}</td>
+                            <td class="px-4 py-2 text-center space-x-2">
+                                <a href="{% url 'user:update_adresse' adresse.id %}" class="text-blue-500 hover:underline">Modifier</a>
+                                <button onclick="notif('{{ adresse.id }}')" class="text-red-500 hover:underline">Supprimer</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center text-red-500 py-4">
+                                <h3>Aucune information disponible pour le moment.</h3>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block notif_javascript %}
+<script>
+    function notif(adresseId) {
+        const deleteUrl = "{% url 'user:delete_adresse' 0 %}".replace('0', adresseId);
+        Swal.fire({
+            title: "Êtes-vous sûr de vouloir supprimer ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Non",
+            dangerMode: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;
+            }
+        });
+    }
+</script>
+{% endblock notif_javascript %}
